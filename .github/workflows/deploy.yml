@@ -9,14 +9,20 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout Code
-        uses: actions/checkout@v3
-
+        uses: actions/checkout@v4
+      
+      - name: Debug - Check Secret Availability
+        run: |
+          if [ -z "${{ secrets.VM_IP }}" ]; then echo "VM_IP is EMPTY"; else echo "VM_IP is FOUND"; fi
+          if [ -z "${{ secrets.VM_USER }}" ]; then echo "VM_USER is EMPTY"; else echo "VM_USER is FOUND"; fi
+          
       - name: Deploy to Azure VM
-        uses: appleboy/ssh-action@master
+        uses: appleboy/ssh-action@v1.0.3
         with:
           host: ${{ secrets.VM_IP }}
           username: ${{ secrets.VM_USER }}
           key: ${{ secrets.SSH_PRIVATE_KEY }}
+          port: 22
           script: |
             cd /var/www/html
             git pull origin main
@@ -24,4 +30,5 @@ jobs:
             sudo docker stop portfolio-container || true
             sudo docker rm portfolio-container || true
             sudo docker run -d -p 80:5000 --name portfolio-container my-portfolio
-            
+            3. One Final Fix on the VM
+            sudo docker run -d -p 80:5000 --name portfolio-container my-portfolio
