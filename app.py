@@ -6,7 +6,7 @@ app = Flask(__name__)
 @app.route('/')
 def index():
     context = {
-        "name": "Prem Panjala",
+        "name": "Prem Kumar Panjala",
         "role": "Certified Cloud Support Engineer",
         "experience": "1.5+ Years in Azure",
         "degree": "MSc in Computing",
