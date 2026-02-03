@@ -1,0 +1,27 @@
+name: Deploy Portfolio
+
+on:
+  push:
+    branches: [ main ]  # Runs every time you push to the main branch
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v3
+
+      - name: Deploy to Azure VM
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.VM_IP }}
+          username: ${{ secrets.VM_USER }}
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          script: |
+            cd /var/www/html
+            git pull origin main
+            sudo docker build -t my-portfolio .
+            sudo docker stop portfolio-container || true
+            sudo docker rm portfolio-container || true
+            sudo docker run -d -p 80:5000 --name portfolio-container my-portfolio
+            
