@@ -1,0 +1,92 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="min-h-screen py-20 flex flex-col items-center">
+
+    <div class="max-w-2xl w-full p-8 bg-gray-800 rounded-xl shadow-2xl border border-gray-700 mx-4">
+        <h1 class="text-4xl font-bold text-blue-400 mb-2">{{ name }}</h1>
+        <p class="text-xl text-gray-300">{{ role }}</p>
+        
+        <div class="mt-6 space-y-4">
+            <p class="text-gray-400">
+                <span class="font-bold text-white">Experience:</span> {{ experience }} 
+            </p>
+            <p class="text-gray-400">
+                <span class="font-bold text-white">Education:</span> {{ degree }} 
+            </p>
+        </div>
+
+        <div class="mt-8 flex gap-4">
+            <a href="mailto:prem.panjala23@gmail.com" class="bg-blue-600 hover:bg-blue-500 text-white px-6 py-2 rounded-lg transition font-medium">
+                Contact Me
+            </a>
+            <a href="https://github.com/PremKPG" target="_blank" class="border border-gray-600 hover:border-blue-400 text-gray-300 px-6 py-2 rounded-lg transition font-medium">
+                View GitHub
+            </a>
+        </div>
+    </div>
+
+    <div class="max-w-4xl w-full mt-12 px-4">
+        <h2 class="text-2xl font-bold text-white mb-8 text-center underline decoration-blue-500 decoration-4 underline-offset-8">
+            Technical Expertise
+        </h2>
+        
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            {% for skill_group in skills %}
+            <div class="bg-gray-800 p-6 rounded-lg border border-gray-700 hover:border-blue-500 transition shadow-lg group">
+                <h3 class="text-blue-400 font-bold text-lg mb-4 group-hover:text-blue-300 transition">
+                    {{ skill_group.category }}
+                </h3>
+                <div class="flex flex-wrap gap-2">
+                     {% for item in skill_group.list %}
+                     <span class="bg-gray-700 text-gray-200 px-3 py-1 rounded-full text-xs font-medium border border-gray-600">
+                          {{ item }}
+                    </span>
+                     {% endfor %}
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+
+    <div class="max-w-4xl w-full mt-20 px-4">
+    <h2 class="text-2xl font-bold text-white mb-8 text-center underline decoration-blue-500 decoration-4 underline-offset-8">
+        Professional Journey
+    </h2>
+
+    <div class="bg-gray-800 p-8 rounded-xl border border-gray-700 shadow-lg">
+        <div class="flex justify-between items-start mb-4">
+            <div>
+                <h3 class="text-xl font-bold text-blue-400">Cloud Support Engineer</h3>
+                <p class="text-gray-300">ProArch | Aug 2022 - Dec 2023 </p>
+            </div>
+            <span class="bg-blue-900 text-blue-200 text-xs px-2 py-1 rounded">Full-Time</span>
+        </div>
+        <ul class="list-disc list-inside text-gray-400 space-y-2 text-sm">
+            <li>L2/L3 operational support for Azure infrastructure (Compute, Networking, Storage, Identity).</li>
+            <li>Resolved 500+ technical inquiries and received 'Spot Award' for excellence.</li>
+            <li>Promoted Azure best practices through internal knowledge sharing, documentation, and peer mentoring 3 team members in acheiving Azure certifications.</li>
+        </ul>
+    </div>
+    </div>
+    <div class="max-w-4xl w-full mt-12 px-4 pb-20">
+    <h2 class="text-2xl font-bold text-white mb-8 text-center underline decoration-blue-500 decoration-4 underline-offset-8">
+        Certifications
+    </h2>
+    <div class="flex flex-wrap justify-center gap-6">
+        {% for cert in certifications %}
+        <div class="bg-gray-800 border border-gray-700 p-4 rounded-lg shadow-md flex items-center space-x-4 hover:border-blue-400 transition">
+            <div class="bg-blue-600 h-8 w-8 rounded-full flex items-center justify-center text-white font-bold text-xs">
+                ✓
+            </div>
+            <div>
+                <p class="text-white font-bold text-sm">{{ cert.name }}</p>
+                <p class="text-gray-400 text-xs">{{ cert.title }}</p>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+    </div>
+
+</div> 
+{% endblock %}
