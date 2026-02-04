@@ -2,20 +2,17 @@ name: Deploy Portfolio
 
 on:
   push:
-    branches: [ main ]  # Runs every time you push to the main branch
+    branches: [ main ]
 
 jobs:
   deploy:
     runs-on: ubuntu-latest
+    # environment: production  # Uncomment this ONLY if your secrets are in a GitHub Environment
+    
     steps:
       - name: Checkout Code
         uses: actions/checkout@v4
-      
-      - name: Debug - Check Secret Availability
-        run: |
-          if [ -z "${{ secrets.VM_IP }}" ]; then echo "VM_IP is EMPTY"; else echo "VM_IP is FOUND"; fi
-          if [ -z "${{ secrets.VM_USER }}" ]; then echo "VM_USER is EMPTY"; else echo "VM_USER is FOUND"; fi
-          
+
       - name: Deploy to Azure VM
         uses: appleboy/ssh-action@v1.0.3
         with:
@@ -24,11 +21,14 @@ jobs:
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           port: 22
           script: |
+            # Navigate to project
             cd /var/www/html
+            
+            # Pull latest changes
             git pull origin main
+            
+            # Build and Deploy using Docker
             sudo docker build -t my-portfolio .
             sudo docker stop portfolio-container || true
             sudo docker rm portfolio-container || true
-            sudo docker run -d -p 80:5000 --name portfolio-container my-portfolio
-            3. One Final Fix on the VM
             sudo docker run -d -p 80:5000 --name portfolio-container my-portfolio
