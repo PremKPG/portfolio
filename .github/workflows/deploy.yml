@@ -5,29 +5,27 @@ on:
     branches: [ main ]
 
 jobs:
-  deploy:
+  deploy-job: # Renamed the job to avoid naming conflicts
     runs-on: ubuntu-latest
-    # environment: production  # Uncomment this ONLY if your secrets are in a GitHub Environment
     
     steps:
       - name: Checkout Code
         uses: actions/checkout@v4
 
       - name: Deploy to Azure VM
-        uses: appleboy/ssh-action@v1.0.3
+        uses: appleboy/ssh-action@v1.2.0 # Updated to latest version
         with:
           host: ${{ secrets.VM_IP }}
           username: ${{ secrets.VM_USER }}
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           port: 22
           script: |
-            # Navigate to project
             cd /var/www/html
+            # Force the local VM code to match GitHub exactly
+            git fetch --all
+            git reset --hard origin/main
             
-            # Pull latest changes
-            git pull origin main
-            
-            # Build and Deploy using Docker
+            # Build and Run
             sudo docker build -t my-portfolio .
             sudo docker stop portfolio-container || true
             sudo docker rm portfolio-container || true
