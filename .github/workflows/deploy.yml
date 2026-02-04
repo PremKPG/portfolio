@@ -21,12 +21,13 @@ jobs:
           port: 22
           script: |
             cd /var/www/html
-            # Force the local VM code to match GitHub exactly
             git fetch --all
             git reset --hard origin/main
             
-            # Build and Run
-            sudo docker build -t my-portfolio .
+            # Force Docker to rebuild without using old cached layers
+            sudo docker build --no-cache -t my-portfolio .
+            
+            # Kill the old container and start the fresh one
             sudo docker stop portfolio-container || true
             sudo docker rm portfolio-container || true
             sudo docker run -d -p 80:5000 --name portfolio-container my-portfolio
